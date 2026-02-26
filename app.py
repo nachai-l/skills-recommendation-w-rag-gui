@@ -67,48 +67,55 @@ def main():
             state.selected = {}
 
     # --- Main search input ---
-    query = st.text_input("Query", value=state.last_query, placeholder="e.g., data scientist / PCR / account executive")
+    # Use st.form so that pressing Enter in the text box submits the search
+    # (without a form, Enter reruns the app but st.button stays False, causing
+    # the user to have to submit twice).
+    with st.form("search_form"):
+        query = st.text_input(
+            "Query",
+            value=state.last_query,
+            placeholder="e.g., data scientist / PCR / account executive",
+        )
+        submitted = st.form_submit_button("Search", type="primary")
+
+    if submitted:
+        q = (query or "").strip()
+        if not q:
+            st.error("Query cannot be empty.")
+        else:
+            req = RecommendRequest(
+                query=q,
+                top_k=top_k,
+                debug=debug,
+                require_judge_pass=require_judge_pass,
+                top_k_vector=top_k_vector,
+                top_k_bm25=top_k_bm25,
+                require_all_meta=require_all_meta,
+            )
+            try:
+                resp = recommend_skills(cfg.api, req)
+                payload = resp.get("payload") or {}
+                meta = resp.get("meta") or {}
+
+                state.last_query = payload.get("query", q)
+                state.generation_cache_id = (meta.get("generation_cache_id") or "") if isinstance(meta, dict) else ""
+                state.last_results = payload.get("recommended_skills") or []
+
+                st.success(f"Got {len(state.last_results)} skills.")
+            except ApiError as e:
+                st.error(str(e))
+                if e.detail is not None:
+                    st.code(json.dumps(e.detail, ensure_ascii=False, indent=2))
+            except Exception as e:
+                st.error("Unexpected error")
+                st.exception(e)
 
     colA, colB = st.columns([1, 2], gap="large")
 
     with colA:
-        if st.button("Search", type="primary", use_container_width=True):
-            q = (query or "").strip()
-            if not q:
-                st.error("Query cannot be empty.")
-            else:
-                req = RecommendRequest(
-                    query=q,
-                    top_k=top_k,
-                    debug=debug,
-                    require_judge_pass=require_judge_pass,
-                    top_k_vector=top_k_vector,
-                    top_k_bm25=top_k_bm25,
-                    require_all_meta=require_all_meta,
-                )
-                try:
-                    resp = recommend_skills(cfg.api, req)
-                    payload = resp.get("payload") or {}
-                    meta = resp.get("meta") or {}
-
-                    state.last_query = payload.get("query", q)
-                    state.generation_cache_id = (meta.get("generation_cache_id") or "") if isinstance(meta, dict) else ""
-                    state.last_results = payload.get("recommended_skills") or []
-
-                    st.success(f"Got {len(state.last_results)} skills.")
-                except ApiError as e:
-                    st.error(str(e))
-                    if e.detail is not None:
-                        st.code(json.dumps(e.detail, ensure_ascii=False, indent=2))
-                except Exception as e:
-                    st.error("Unexpected error")
-                    st.exception(e)
-
         # show analysis summary
         if state.last_results:
             st.subheader("Analysis summary")
-            # try read from last response? not stored; show as part of details in next section
-            # We'll display it from a stored copy if you want later.
             st.caption("Tip: click a row on the right to see details, then add to selected.")
 
     with colB:
