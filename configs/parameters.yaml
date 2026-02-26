@@ -1,6 +1,7 @@
 api:
   base_url: "https://skills-recommendation-api-810737581373.asia-southeast1.run.app"
   endpoint_recommend: "/v1/recommend-skills"
+  endpoint_health: "/healthz"
   timeout_seconds: 120
 
 defaults:
