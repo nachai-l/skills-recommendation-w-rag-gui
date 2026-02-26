@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+.pytest_cache/
+artifacts/
+tests/
+*.pyc
+.DS_Store
+.git/
+.vscode/
+.idea/

@@ -1,0 +1,18 @@
+api:
+  base_url: "https://skills-recommendation-api-810737581373.asia-southeast1.run.app"
+  endpoint_recommend: "/v1/recommend-skills"
+  timeout_seconds: 120
+
+defaults:
+  top_k: 20
+  top_k_vector: 20
+  top_k_bm25: 20
+  debug: false
+  require_judge_pass: true
+  require_all_meta: false
+
+ui:
+  page_title: "Skills Recommendation GUI"
+  page_icon: "🧠"
+  preview_chars: 120
+  max_display_rows: 200
