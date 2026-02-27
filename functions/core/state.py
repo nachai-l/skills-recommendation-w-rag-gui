@@ -1,3 +1,17 @@
+# functions/core/state.py
+"""
+UI state helpers for the Skills Recommendation Streamlit app.
+
+This module defines:
+- `AppState`: session-scoped state container (last query, last results, selected skills)
+- `add_selected()` / `remove_selected()`: mutate selected skills (deduped by skill_id)
+- `selected_list()`: return selected skills in a stable, user-friendly order
+
+Notes:
+- `AppState.selected` is a dict keyed by `skill_id` to ensure deduplication.
+- `selected_list()` sorts by `relevance_score` (desc), then `skill_name` (asc), then `skill_id`.
+"""
+
 from __future__ import annotations
 
 from dataclasses import dataclass

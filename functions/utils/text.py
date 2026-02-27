@@ -1,3 +1,18 @@
+# functions/utils/text.py
+"""
+Text and formatting utilities for the Skills Recommendation GUI.
+
+This module centralizes small, UI-safe helpers used across the Streamlit app:
+- `safe_str()`: normalize None/unknown types to a string (None -> "")
+- `truncate()`: truncate long text with an ellipsis for table previews
+- `evidence_to_display()`: format evidence for on-screen rendering
+- `evidence_to_export()`: format evidence for exports (pipe-joined or JSON)
+
+Conventions:
+- Evidence may be `list[str]` or a preformatted string; helpers handle both.
+- Export formatting is deterministic to keep CSV/XLSX outputs stable.
+"""
+
 from __future__ import annotations
 
 import json

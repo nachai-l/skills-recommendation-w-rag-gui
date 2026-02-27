@@ -1,3 +1,20 @@
+# functions/core/api_client.py
+"""
+API client helpers for Skills Recommendation service.
+
+This module provides:
+- `RecommendRequest`: typed request payload builder for `/v1/recommend-skills`
+- `health_check()`: basic connectivity check to `/healthz`
+- `recommend_skills()`: POST wrapper with consistent error handling
+
+Error handling:
+- Raises `ApiError` for timeouts, network errors, non-200 responses, and non-JSON bodies.
+- `ApiError.detail` contains best-effort server error payload (JSON if possible, else raw text).
+
+Config:
+- Uses `ApiConfig` (base_url, endpoints, timeout_seconds). URL joining is normalized by `_url()`.
+"""
+
 from __future__ import annotations
 
 from dataclasses import dataclass

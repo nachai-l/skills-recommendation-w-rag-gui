@@ -1,4 +1,15 @@
 # tests/conftest.py
+"""
+Pytest configuration for the project test suite.
+
+This conftest ensures the project root is on `sys.path` so tests can import
+the local package modules (e.g., `import functions...`) without requiring an
+editable install.
+
+Note:
+- This is a lightweight path tweak intended for local/CI test execution.
+"""
+
 from __future__ import annotations
 
 import sys

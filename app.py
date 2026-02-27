@@ -1,3 +1,22 @@
+# app.py
+"""
+Skill Recommendation UI (Streamlit)
+
+A lightweight Streamlit front-end for the Skills Recommendation API.
+
+Features:
+- Submits a `RecommendRequest` to the backend API and renders ranked skill results
+- Lets users inspect skill details (reasoning, evidence, criteria) and build a selected list
+- Exports selected skills as CSV/XLSX, including query + generation_cache_id for traceability
+
+State model:
+- Uses `AppState` stored in `st.session_state["app_state"]`
+- Selected skills are deduped by `skill_id`
+
+Run:
+- `streamlit run app.py`
+"""
+
 from __future__ import annotations
 
 import json

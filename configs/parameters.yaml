@@ -1,3 +1,24 @@
+# Skills Recommendation GUI — configuration
+#
+# This file configures the Streamlit front-end and its backend API client.
+#
+# Sections:
+# - api:
+#   - base_url: Cloud Run base URL for the Skills Recommendation API
+#   - endpoint_recommend: path for skill recommendation requests
+#   - endpoint_health: path for health checks
+#   - timeout_seconds: request timeout for API calls
+#
+# - defaults:
+#   Default request parameters used to prefill the UI controls (sliders/toggles).
+#
+# - ui:
+#   Streamlit page settings and display constraints.
+#
+# Notes:
+# - `base_url` should NOT end with a trailing slash.
+# - `endpoint_*` should start with '/'.
+
 api:
   base_url: "https://skills-recommendation-api-810737581373.asia-southeast1.run.app"
   endpoint_recommend: "/v1/recommend-skills"

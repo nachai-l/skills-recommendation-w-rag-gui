@@ -1,3 +1,22 @@
+# functions/utils/config.py
+"""
+Typed configuration loader for the Skills Recommendation Streamlit app.
+
+This module defines dataclass-based config models and a YAML loader that reads
+`configs/parameters.yaml` (by default) into a strongly-typed `AppConfig`.
+
+Structure:
+- `ApiConfig`: API base URL, endpoints, timeout
+- `DefaultsConfig`: default request parameters for UI controls
+- `UiConfig`: Streamlit page settings and display limits
+- `AppConfig`: top-level container (api/defaults/ui)
+
+Loading rules:
+- `_read_yaml()` validates the YAML file exists and the root is a mapping.
+- `load_config()` applies sane defaults for missing keys, strips trailing slash
+  from `api.base_url`, and requires `api.base_url` to be present.
+"""
+
 from __future__ import annotations
 
 from dataclasses import dataclass

@@ -1,3 +1,19 @@
+# functions/core/export.py
+"""
+Export utilities for selected skills (CSV/XLSX).
+
+This module converts selected skill objects (dicts) into a normalized tabular shape,
+then exports as bytes for Streamlit download buttons.
+
+Key behaviors:
+- `build_export_rows()` enriches each selected skill with `query` and `generation_cache_id`
+  for traceability, and formats `evidence` via `evidence_to_export(mode=...)`.
+- `_to_df()` enforces a stable column order defined by `EXPORT_COLUMNS` (missing columns
+  are created as None), ensuring consistent output schemas across runs.
+- `export_csv_bytes()` returns UTF-8 encoded CSV bytes.
+- `export_xlsx_bytes()` writes a single-sheet XLSX ("selected_skills") and returns bytes.
+"""
+
 from __future__ import annotations
 
 from io import BytesIO
