@@ -20,6 +20,7 @@ Run:
 from __future__ import annotations
 
 import json
+import time
 from datetime import datetime
 
 import pandas as pd
@@ -69,7 +70,7 @@ def main():
     # --- Sidebar controls ---
     with st.sidebar:
         st.subheader("API")
-        st.caption(cfg.api.base_url)
+        st.code(cfg.api.base_url, language=None)
 
         st.subheader("Request settings")
         top_k = st.slider("top_k", min_value=1, max_value=100, value=int(cfg.defaults.top_k))
@@ -112,7 +113,11 @@ def main():
                 require_all_meta=require_all_meta,
             )
             try:
+                t0 = time.perf_counter()
                 resp = recommend_skills(cfg.api, req)
+                state.last_resp_time_ms = (time.perf_counter() - t0) * 1000
+                state.last_resp_raw = resp
+
                 payload = resp.get("payload") or {}
                 meta = resp.get("meta") or {}
 
@@ -120,7 +125,7 @@ def main():
                 state.generation_cache_id = (meta.get("generation_cache_id") or "") if isinstance(meta, dict) else ""
                 state.last_results = payload.get("recommended_skills") or []
 
-                st.success(f"Got {len(state.last_results)} skills.")
+                st.success(f"Got {len(state.last_results)} skills in {state.last_resp_time_ms:.0f} ms.")
             except ApiError as e:
                 st.error(str(e))
                 if e.detail is not None:
@@ -185,6 +190,12 @@ def main():
                 if st.button("Add to Selected Skills", use_container_width=True):
                     add_selected(state, skill_obj)
                     st.success("Added (deduped by skill_id).")
+
+    # --- Raw response expander ---
+    if state.last_resp_raw is not None:
+        label = f"Raw API response  ·  {state.last_resp_time_ms:.0f} ms" if state.last_resp_time_ms is not None else "Raw API response"
+        with st.expander(label):
+            st.json(state.last_resp_raw)
 
     # --- Selected section + export ---
     st.divider()

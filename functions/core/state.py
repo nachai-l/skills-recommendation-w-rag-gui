@@ -24,6 +24,8 @@ class AppState:
     generation_cache_id: str = ""
     last_results: List[Dict[str, Any]] = None  # list of skill objects
     selected: Dict[str, Dict[str, Any]] = None  # skill_id -> skill object
+    last_resp_raw: Optional[Dict[str, Any]] = None  # full API response for debug expander
+    last_resp_time_ms: Optional[float] = None  # round-trip time in ms
 
     def __post_init__(self) -> None:
         if self.last_results is None:
