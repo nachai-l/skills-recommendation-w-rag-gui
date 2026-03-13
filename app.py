@@ -70,7 +70,8 @@ def main():
     # --- Sidebar controls ---
     with st.sidebar:
         st.subheader("API")
-        st.code(cfg.api.base_url, language=None)
+        docs_url = cfg.api.base_url.rstrip("/") + "/docs"
+        st.markdown(f"[API Docs]({docs_url})")
 
         st.subheader("Request settings")
         top_k = st.slider("top_k", min_value=1, max_value=100, value=int(cfg.defaults.top_k))
