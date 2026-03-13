@@ -50,6 +50,10 @@ def main():
 
     # --- Sidebar controls ---
     with st.sidebar:
+        st.subheader("API")
+        docs_url = cfg.api.base_url.rstrip("/") + "/docs"
+        st.markdown(f"[API Docs]({docs_url})")
+
         st.subheader("Request settings")
         top_k = st.slider("top_k", min_value=1, max_value=100, value=int(cfg.defaults.top_k))
         top_k_vector = st.slider("top_k_vector", min_value=1, max_value=200, value=int(cfg.defaults.top_k_vector))
